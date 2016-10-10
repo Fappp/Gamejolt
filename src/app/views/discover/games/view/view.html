@@ -1,0 +1,68 @@
+<div ng-if="gameCtrl.game">
+	<gj-game-maturity-block game="gameCtrl.game">
+
+		<section class="section section-thin fill-darkest"
+			ng-if="App.user.id == gameCtrl.game.developer.id"
+			>
+			<div class="container text-center">
+
+				<a class="btn btn-outline hidden-xs" ui-sref="dashboard.analytics.view( { resource: 'Game', resourceId: gameCtrl.game.id } )">
+					<span class="jolticon jolticon-chart"></span>
+					<span translate>View Analytics</span>
+				</a>
+
+				<a class="btn btn-outline" ui-sref="dashboard.developer.games.manage.game.overview( { id: gameCtrl.game.id } )">
+					<span class="jolticon jolticon-cog"></span>
+					<span translate>Manage Game</span>
+				</a>
+
+			</div>
+		</section>
+
+		<gj-page-header
+			cover-media-item="gameCtrl.game.header_media_item"
+			should-affix-nav="true"
+			>
+
+			<gj-page-header-cover-buttons>
+				<div class="game-header-cover-buttons"
+					ng-if="
+						!Screen.isXs
+						&& $state.is( 'discover.games.view.overview' )
+						&& (gameCtrl.installableBuilds.length || gameCtrl.browserBuilds.length || gameCtrl.game._can_buy_primary_sellable)
+					"
+					>
+					<gj-game-cover-buttons
+						game="gameCtrl.game"
+						packages="gameCtrl.packages"
+						installable-builds="gameCtrl.installableBuilds"
+						browser-builds="gameCtrl.browserBuilds"
+						on-show-multiple-packages="gameCtrl.scrollToMultiplePackages()"
+						on-show-package-payment="gameCtrl.scrollToPackagePayment( $package )"
+						>
+					</gj-game-cover-buttons>
+				</div>
+			</gj-page-header-cover-buttons>
+
+			<gj-page-header-content>
+				<div gj-partial="/app/views/discover/games/view/_header/_content.html"></div>
+			</gj-page-header-content>
+
+			<gj-page-header-spotlight>
+				<div gj-user-avatar="gameCtrl.game.developer"></div>
+			</gj-page-header-spotlight>
+
+			<gj-page-header-nav>
+				<div gj-partial="/app/views/discover/games/view/_header/_nav.html"></div>
+			</gj-page-header-nav>
+
+			<gj-page-header-controls>
+				<div gj-partial="/app/views/discover/games/view/_header/_controls.html"></div>
+			</gj-page-header-controls>
+
+		</gj-page-header>
+
+		<ui-view></ui-view>
+
+	</gj-game-maturity-block>
+</div>

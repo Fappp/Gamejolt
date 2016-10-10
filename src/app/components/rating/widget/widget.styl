@@ -1,0 +1,65 @@
+.rating-widget
+	@extend .clearfix
+	position: relative
+	display: inline-block
+
+	&-icons
+		display: inline-block
+		margin-right: 20px
+
+		.rating-widget-big &
+			margin-right: 40px
+
+	&-clear
+		position: absolute
+		bottom: 4px
+		right: 0
+		width: 20px
+		text-align: center
+		color: $gray-light
+		cursor: pointer
+
+		.rating-widget-dark &
+			color: $gray-lightest
+
+		.rating-widget-big &
+			width: 40px
+			right: 5px
+
+		> .jolticon
+			display: none
+			cursor: pointer
+
+			@media $media-mobile
+				display: block
+
+			&:hover
+				color: $gj-pink
+
+			.rating-widget:hover &
+				display: block
+
+	&-icon
+		float: left
+		cursor: pointer
+		margin: 0 !important
+
+		&
+		.rating-widget-icons:hover &
+			color: $gray-lighter
+
+			.rating-widget-dark &
+				color: $gray-lightest
+
+		&.hover
+			color: $gj-blue !important
+
+			.rating-widget-dark &
+				color: $gj-green !important
+
+		&.selected
+			color: $gj-blue
+
+			.rating-widget-dark &
+				color: $gj-green
+

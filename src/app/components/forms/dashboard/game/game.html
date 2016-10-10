@@ -1,0 +1,115 @@
+<form gj-form="formModel" name="gameForm">
+	<gj-form-loader
+		url="/web/dash/developer/games/save{{ scope.method == 'edit' ? '/' + scope.baseModel.id : '' }}"
+		on-loaded="onLoaded( $payload )"
+		>
+		<div ng-switch="stage()">
+
+			<div ng-switch-when="rules">
+
+				<div translate>
+					<p>You must agree to the following rules before adding a game:</p>
+					<ul>
+						<li>Don't upload games you didn't make. If you are not the game's developer, don't add the game to the site. If you're a fan, encourage the developer to add it themselves.</li>
+						<li>Publishers are not allowed to upload games; only developers are.</li>
+						<li>Only actual <em>games</em> may be uploaded to the site. No applications, software, or tools are allowed at this time. We may accept these in the future or on a case by case basis, but for now, let's just keep it to games.</li>
+						<li>No stripped-down demos or "lite" versions of commercial games are permitted, unless you also add the full version for sale.</li>
+						<li>We welcome and encourage you to add games that are incomplete and still in development, as long as they are tagged as Works-in-Progress. However, you should keep your game hidden until you have something to show. Work-in-Progress games do not have to be playable, but they must be further along than the concept stage. Before you unhide the game, make sure you at least have some screenshots and an informative description.</li>
+						<li>Do not add links to download/play or purchase your game on other sites unless you have already uploaded it to Game Jolt. You can't use your game page as an advertisement for another site.</li>
+						<li>For browser-based games, we don't allow you to display ads in the preloader on Game Jolt. Remove any ads or block them from showing on the site.</li>
+					</ul>
+					<p>If you have questions or concerns about the rules, get in touch: <a href="mailto:contact@gamejolt.com">contact@gamejolt.com</a></p>
+				</div>
+
+				<br>
+				<div>
+					<a class="btn btn-success-outline btn-block" ng-click="acceptRules()">
+						<span class="jolticon jolticon-checkbox"></span>
+						<span translate>dash.games.add.rules_accept_button</span>
+					</a>
+				</div>
+
+			</div>
+
+			<div ng-switch-when="dev-status">
+
+				<p class="page-help" translate>
+					Choose the stage of development that your game is currently in. You are able to change your development stage at any point.
+				</p>
+
+				<gj-form-dashboard-game-dev-stage-selector
+					on-select="formModel.development_status = $stage"
+					>
+				</gj-form-dashboard-game-dev-stage-selector>
+
+			</div>
+
+			<div ng-switch-when="details">
+
+				<fieldset ng-class="{ 'game-form-disabled': isDisabled }" ng-disabled="isDisabled">
+
+					<form-group name="title" label="{{ 'dash.games.form.title_label' | translate }}">
+						<input form-control="text" ng-maxlength="250">
+						<control-errors></control-errors>
+					</form-group>
+
+					<form-group name="web_site" label="{{ 'dash.games.form.website_label' | translate }}" optional="true">
+						<input form-control="url" ng-maxlength="250">
+						<control-errors></control-errors>
+					</form-group>
+
+					<form-group name="category" label="{{ 'dash.games.form.category_label' | translate }}">
+						<select form-control="select" ng-options="key as val for ( key, val ) in categories">
+							<option value="" translate>dash.games.form.category_placeholder</option>
+						</select>
+						<control-errors></control-errors>
+					</form-group>
+
+					<form-group name="creation_tool" label="{{ 'dash.games.form.engine_label' | translate }}">
+						<select form-control="select" ng-options="key as val for (key, val) in engines">
+							<option value="" translate>dash.games.form.engine_placeholder</option>
+						</select>
+						<control-errors></control-errors>
+					</form-group>
+
+					<div gj-expand-when="formModel.creation_tool == 'other'">
+						<form-group name="creation_tool_other" label="{{ 'dash.games.form.engine_other_label' | translate }}" optional="true">
+							<input form-control="text" ng-maxlength="200">
+							<control-errors></control-errors>
+
+							<p class="help-block">
+								<span translate>dash.games.form.engine_other_help</span>
+								<span class="text-help" tooltip="{{ 'dash.games.form.engine_other_why_tooltip' | translate }}" translate>
+									dash.games.form.engine_other_why
+								</span>
+							</p>
+						</form-group>
+					</div>
+
+				</fieldset>
+
+				<button
+					ng-if="method == 'edit' && !isWizard"
+					gj-form-submit-button
+					class="btn btn-outline"
+					ng-disabled="!gameForm.$valid"
+					ng-click="onSubmit()"
+					>
+					<span class="jolticon jolticon-edit"></span>
+					<span translate>Save Details</span>
+				</button>
+
+				<div ng-if="method == 'add' || isWizard">
+					<gj-form-dashboard-game-wizard-controls
+						game="formModel"
+						can-proceed="gameForm.$valid"
+						on-next="onSubmit()"
+						>
+					</gj-form-dashboard-game-wizard-controls>
+				</div>
+
+			</div>
+
+		</div>
+	</gj-form-loader>
+</form>

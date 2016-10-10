@@ -1,0 +1,179 @@
+// Used for subtracting the bottom margin of thumbnails at the end of a grid.
+.game-thumbnail-grid
+	margin-bottom: -($grid-gutter-width-xs)
+
+	@media $media-sm-up
+		margin-bottom: -($grid-gutter-width)
+
+// Can apply to the ng-repeated element when showing thumbnails.
+// This way you can choose which element gets the animation.
+.game-thumbnail-anim
+	@extend .anim-fade-in-up, .stagger, .no-animate-xs, .no-animate-leave
+
+gj-game-thumbnail
+	display: block
+
+.game-thumbnail
+
+	$zindex-img = 1
+	$zindex-video = 2
+	$zindex-tags = 3
+	$zindex-controls = 3
+
+	position: relative
+	display: block
+	margin-bottom: $grid-gutter-width-xs
+
+	@media $media-sm-up
+		margin-bottom: $grid-gutter-width
+
+	&:hover
+		.game-thumbnail-pricing
+		.game-thumbnail-tag
+		.game-thumbnail-video-tag
+			display: none
+
+	&-controls
+		position: absolute
+		top: 0
+		right: 0
+		z-index: $zindex-controls
+		border-left: 3px solid $white
+		border-bottom: 3px solid $white
+		background-color: $white
+
+	&-thumb
+		position: relative
+		height: 0
+		padding-top: 56.25%  // HD 16:9
+		overflow: hidden
+		background-color: $gray-lightest
+
+		.fill-dark &
+		.fill-darker &
+		.fill-darkest &
+			background-color: $black
+
+		> .jolticon
+			position: absolute
+			font-size: 16px * 4
+			left: 50%
+			margin-left: -(@font-size / 2)
+			top: @left
+			margin-top: @margin-left
+			color: $gray-lighter
+
+		img
+		video
+		gj-video
+			display: block
+			position: absolute
+			left: 0
+			right: 0
+			top: 0
+			bottom: 0
+			width: 100%
+			height: 100%
+
+		img
+			z-index: $zindex-img
+
+		video
+			z-index: $zindex-video
+
+	&-meta
+		position: relative
+		padding-top: 7px
+
+	&-dev
+		@extend .h6
+		text-overflow()
+		margin: 2px 0
+		color: $gray-light
+		line-height: 1.5  // Cuts off `g` on ff if any lower.
+		font-weight: 300
+
+	&-title
+		@extend .h5
+		text-overflow()
+		margin: 0
+		width: 100%
+		line-height: 1.3
+		font-weight: bold
+		color: $gray-darker
+
+		.fill-dark &
+		.fill-darker &
+		.fill-darkest &
+			color: $gray-lightest
+
+	&-os
+		float: right
+		margin-left: 5px
+
+	&-meter
+		margin-left: 5px
+		float: right
+
+		.meter
+			display: inline-block
+
+	&-rating-count
+		color: $text-muted
+		font-size: $font-size-tiny
+		margin-right: 2px
+
+	&-video-tag
+		position: absolute
+		bottom: 0
+		left: 5px
+		padding: 5px
+		padding-bottom: 3px
+		color: $gj-blue
+		background-color: rgba( $black, 0.8 )
+		z-index: $zindex-tags
+
+	&-tag
+		@extend .tag
+		position: absolute
+		left: 0
+		top: 10px
+		z-index: $zindex-tags
+		color: $gj-blue
+		background-color: $gray-darkest
+
+	&-pricing
+		@extend .fill-darkest
+		position: absolute
+		height: 30px
+		line-height: @height
+		top: -(@height)
+		right: 5px
+		padding: 0 10px
+		text-align: center
+		z-index: $zindex-tags
+
+		&-owned
+			@extend .fill-green
+
+			& ^[-1]-tag
+				color: inherit
+
+		&-amount
+			color: $white
+			font-size: $font-size-small
+
+		&-currency
+			color: $gray-lighter
+
+		&-decimal
+			font-size: $font-size-small
+
+		&-tag
+			color: $white
+			font-size: $font-size-tiny
+			font-weight: bold
+			text-transform: uppercase
+
+			&.muted
+				color: $gray-lighter

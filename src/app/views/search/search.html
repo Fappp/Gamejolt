@@ -1,0 +1,67 @@
+<gj-page-header
+	should-affix-nav="true"
+	hide-nav="!Search.query"
+	>
+
+	<gj-page-header-content>
+
+		<div ng-if="Screen.isXs">
+			<gj-search
+				gj-search-autocomplete-disable="true"
+				>
+			</gj-search>
+		</div>
+
+		<div ng-if="!Screen.isXs">
+			<p class="text-muted sans-margin" translate>
+				search.showing_label
+			</p>
+
+			<h2 class="sans-margin">
+				{{ searchCtrl.query }}
+			</h2>
+		</div>
+
+	</gj-page-header-content>
+
+	<gj-page-header-nav>
+		<nav class="platform-list inline">
+			<ul>
+				<li>
+					<a ui-sref="search.results( { q: searchCtrl.query } )" ui-sref-active="active">
+						<span translate>search.results.overview_tab</span>
+					</a>
+				</li>
+				<li ng-if="searchCtrl.payload.usersCount">
+					<a ui-sref="search.users( { q: searchCtrl.query } )" ui-sref-active="active">
+						<span translate>search.results.users_tab</span>
+						<span class="badge">{{ searchCtrl.payload.usersCount }}</span>
+					</a>
+				</li>
+				<li ng-if="searchCtrl.payload.gamesCount">
+					<a ui-sref="search.games( { q: searchCtrl.query } )" ui-sref-active="active">
+						<span translate>search.results.games_tab</span>
+						<span class="badge">{{ searchCtrl.payload.gamesCount }}</span>
+					</a>
+				</li>
+				<li ng-if="searchCtrl.payload.devlogsCount">
+					<a ui-sref="search.devlogs( { q: searchCtrl.query } )" ui-sref-active="active">
+						<span translate>Devlogs</span>
+						<span class="badge">{{ searchCtrl.payload.devlogsCount }}</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</gj-page-header-nav>
+
+</gj-page-header>
+
+<div gj-expand-when="searchCtrl.noResults">
+	<section class="section fill-pink">
+		<div class="container">
+			{{ ::'search.results.no_results' | translate }}
+		</div>
+	</section>
+</div>
+
+<ui-view></ui-view>

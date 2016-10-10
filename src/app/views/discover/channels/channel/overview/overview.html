@@ -1,0 +1,100 @@
+<section class="section section-thin" ng-if="channelCtrl.shouldShowAds && !Environment.isClient && !Screen.isXs">
+	<gj-ad ad-size="leaderboard"></gj-ad>
+</section>
+
+<section class="section">
+	<div class="container">
+
+		<h3 class="section-header">
+			<a class="link-unstyled"
+				ui-sref="discover.channels.channel.games._fetch( { section: 'best' } )"
+				gj-track-event="channel:row-heading:best"
+				translate
+				translate-params-channel="channelCtrl.channel"
+				>
+				Top <b>#{{ channel }}</b>
+			</a>
+		</h3>
+
+		<div class="full-bleed-xs" ng-class="{ 'scrollable-grid-xs': Screen.isXs }">
+			<div ng-class="{ 'row': !Screen.isXs }">
+				<gj-game-thumbnail
+					class="col-xs-11 col-sm-4 col-md-3"
+					ng-class="{ 'scrollable-grid-item': Screen.isXs }"
+					ng-repeat="game in overviewCtrl.bestGames | limitTo:(Screen.isMobile ? 6 : 8 ) track by game.id"
+					gj-game="game"
+					gj-track-event="channel:slider:game:{{ $index }}"
+					>
+				</gj-game-thumbnail>
+			</div>
+		</div>
+
+		<div class="page-cut">
+			<a class="btn btn-outline"
+				ui-sref="discover.channels.channel.games._fetch( { section: 'best' } )"
+				gj-track-event="channel:more-btn:best"
+				translate
+				>
+				Load More
+			</a>
+		</div>
+
+		<h3 class="section-header">
+			<a class="link-unstyled"
+				ui-sref="discover.channels.channel.games._fetch( { section: 'hot' } )"
+				gj-track-event="channel:row-heading:hot"
+				translate
+				translate-params-channel="channelCtrl.channel"
+				>
+				Hot <b>#{{ channel }}</b>
+			</a>
+		</h3>
+
+		<div class="full-bleed-xs" ng-class="{ 'scrollable-grid-xs': Screen.isXs }">
+			<div ng-class="{ 'row': !Screen.isXs }">
+				<gj-game-thumbnail
+					class="col-xs-11 col-sm-4"
+					ng-class="{ 'scrollable-grid-item': Screen.isXs }"
+					ng-repeat="game in overviewCtrl.hotGames | limitTo:(Screen.isMobile ? 6 : 9 ) track by game.id"
+					gj-game="game"
+					gj-track-event="channel:slider:game:{{ $index }}"
+					>
+				</gj-game-thumbnail>
+			</div>
+		</div>
+
+		<div class="page-cut">
+			<a class="btn btn-outline"
+				ui-sref="discover.channels.channel.games._fetch( { section: 'hot' } )"
+				gj-track-event="channel:more-btn:hot"
+				translate
+				>
+				Load More
+			</a>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-7 col-centered">
+
+				<h2 class="section-header" translate>
+					Hot Posts
+				</h2>
+
+				<gj-activity-feed
+					ng-if="overviewCtrl.posts.hasItems"
+					type="Fireside_Post"
+					items="overviewCtrl.posts"
+					load-more-url="/web/discover/channels/posts/{{ channelCtrl.channel }}"
+					show-game-info="true"
+					>
+				</gj-activity-feed>
+
+				<div class="alert alert-info" ng-if="!overviewCtrl.posts.hasItems" translate>
+					This channel doesn't have any posts yet.
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</section>

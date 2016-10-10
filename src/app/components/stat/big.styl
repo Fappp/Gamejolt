@@ -1,0 +1,36 @@
+.stat-big
+	margin-bottom: $font-size-base
+
+	&.stat-big-smaller
+		margin-bottom: $font-size-small
+
+		.stat-big-digit
+			@extend .text-size-h4
+
+		.stat-big-label
+			font-size: $font-size-small
+
+.stat-big-digit
+	@extend .text-size-h3
+	font-family: $font-family-heading
+	font-weight: bold
+
+	a
+		text-decoration: none
+		border-bottom: 3px solid $gray-lighter
+		color: inherit
+
+		&:hover
+			text-decoration: none
+			border-color: $black
+
+.stat-big-highlight
+	color: $gj-green
+
+.stat-big-label
+	color: $text-muted
+
+	// For inactive editable accordion items, we need to make ourselves a lighter gray.
+	.card-inactive &
+		color: $gray-lighter
+

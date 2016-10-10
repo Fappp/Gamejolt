@@ -1,0 +1,31 @@
+<form gj-form="formModel" name="forumTopicForm">
+
+	<form-group class="no-animate" name="title" label="{{ 'Title' | translate }}">
+		<input form-control="text" ng-maxlength="300">
+		<control-errors></control-errors>
+	</form-group>
+
+	<form-group class="no-animate" name="content_markdown" label="{{ 'Topic Content' | translate }}">
+
+		<div
+			form-markdown-editor
+			preview-class="forum-post-body"
+			markdown-preview-url="/web/forums/posts/preview"
+			>
+		</div>
+
+		<control-errors></control-errors>
+
+	</form-group>
+
+	<button gj-form-submit-button class="btn btn-outline" ng-disabled="!forumTopicForm.$valid" ng-click="onSubmit()">
+		<span class="jolticon" ng-class="method == 'add' ? 'jolticon-add' : 'jolticon-edit'"></span>
+		<span ng-if="method == 'add'" translate>Add Topic</span>
+		<span ng-if="method == 'edit'" translate>Save</span>
+	</button>
+
+	<button class="btn btn-danger-outline" ng-if="method == 'edit'" ng-click="onCancel()" translate>
+		Cancel
+	</button>
+
+</form>

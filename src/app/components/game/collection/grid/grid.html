@@ -1,0 +1,72 @@
+<div class="row game-collection-grid">
+
+	<div ng-repeat="collection in ctrl.collections track by collection._id"
+		class="col-xs-12 col-sm-6 col-lg-4 game-collection-grid-item"
+		>
+
+		<a ui-sref="{{ ::collection.getSref( true ) }}" gj-track-event="{{ ::ctrl.eventLabel }}">
+			<gj-game-collection-thumbnail gj-game-collection="::collection"></gj-game-collection-thumbnail>
+
+			<div class="game-collection-title" ng-switch="::collection.type">
+				<span ng-switch-when="developer">
+					<span ng-if="::collection.from_subscription || collection.id != App.user.id"
+						translate
+						translate-params-developer="::'@' + collection.owner.username"
+						>
+						Games Made <small>by {{ developer }}</small>
+					</span>
+					<span ng-if="!collection.from_subscription && collection.id == App.user.id"
+						translate
+						>
+						Your Games
+					</span>
+				</span>
+
+				<span ng-switch-when="followed">
+					<span ng-if="::collection.from_subscription || collection.id != App.user.id"
+						translate
+						translate-params-user="::'@' + collection.owner.username"
+						>
+						Games Followed <small>by {{ user }}</small>
+					</span>
+					<span ng-if="!collection.from_subscription && collection.id == App.user.id"
+						translate
+						>
+						Your Followed Games
+					</span>
+				</span>
+
+				<span ng-switch-when="owned">
+					<span ng-if="::collection.from_subscription || collection.id != App.user.id"
+						translate
+						translate-params-user="::'@' + collection.owner.username"
+						>
+						Games Owned <small>by {{ user }}</small>
+					</span>
+					<span ng-if="!collection.from_subscription && collection.id == App.user.id"
+						translate
+						>
+						Your Owned Games
+					</span>
+				</span>
+
+				<span ng-switch-when="recommended">
+					<span ng-if="::collection.from_subscription || collection.id != App.user.id"
+						translate
+						translate-params-user="::'@' + collection.owner.username"
+						>
+						Game Recommendations <small>for {{ user }}</small>
+					</span>
+					<span ng-if="!collection.from_subscription && collection.id == App.user.id"
+						translate
+						>
+						Your Recommended Games
+					</span>
+				</span>
+
+				<span ng-switch-default>{{ ::collection.name }}</span>
+			</div>
+		</a>
+	</div>
+
+</div>

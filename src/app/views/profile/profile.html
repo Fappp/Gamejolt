@@ -1,0 +1,137 @@
+<!--
+	If this user is banned, we show very little.
+-->
+<div ng-if="!profileCtrl.user.status">
+	<div gj-partial="/app/views/profile/_banned.html"></div>
+</div>
+
+<gj-page-header
+	ng-if="profileCtrl.user.status > 0"
+	cover-media-item="profileCtrl.headerMediaItem"
+	cover-max-height="300"
+	should-affix-nav="true"
+	>
+
+	<gj-page-header-content>
+		<h1>
+			{{ ::profileCtrl.user.display_name }}
+			<small>
+				@{{ ::profileCtrl.user.username }}
+			</small>
+			<span ng-if="profileCtrl.user.is_verified" class="verified-account-tag jolticon jolticon-verified big" tooltip="{{ ::'profile.verified_tooltip' | translate }}"></span>
+		</h1>
+		<div class="small text-muted">
+
+			<!-- Joined on -->
+			{{ ::'profile.joined' | translate }}
+			<span am-time-ago="::profileCtrl.user.created_on"></span>
+
+			<!-- Logged on -->
+			<span ng-if="::!profileCtrl.isOnline">
+				<span class="dot-separator hidden-xs"></span>
+				<br class="visible-xs">
+				{{ ::'profile.last_seen' | translate }}
+				<span am-time-ago="::profileCtrl.user.last_logged_on"></span>
+			</span>
+
+			<span class="dot-separator"></span>
+
+			<!-- Dogtag -->
+			<span class="user-dogtag" ng-class="'user-dogtag-' + profileCtrl.user.dogtag">{{ profileCtrl.user.dogtag | uppercase }}</span>
+
+			<!-- Friend status -->
+			<span class="tag tag-active" ng-if="profileCtrl.userFriendship.state == User_Friendship.STATE_FRIENDS" tooltip="{{ 'profile.friend_tooltip' | translate }}">
+				{{ ::'profile.friend_tag' | translate }}
+			</span>
+
+			<!-- Online status -->
+			<span ng-if="::!profileCtrl.activeGameSession">
+				<span class="tag" ng-if="::!profileCtrl.isOnline" tooltip="{{ 'profile.offline_tooltip' | translate }}">
+					<span class="jolticon jolticon-chat-offline"></span>
+					{{ ::'profile.offline_tag' | translate }}
+				</span>
+				<span class="tag tag-active" ng-if="::profileCtrl.isOnline" tooltip="{{ 'profile.online_tooltip' | translate }}">
+					<span class="jolticon jolticon-chat-online"></span>
+					{{ ::'profile.online_tag' | translate }}
+				</span>
+			</span>
+
+			<!-- In-game -->
+			<span class="tag tag-pink" ng-if="::profileCtrl.activeGameSession" tooltip="{{ 'profile.in_game_tooltip' | translate }}">
+				<span class="jolticon jolticon-chat-in-game"></span>
+				{{ ::'profile.in_game_tag' | translate }}
+			</span>
+		</div>
+	</gj-page-header-content>
+
+	<gj-page-header-spotlight>
+		<div gj-user-avatar="profileCtrl.user" ng-if="!profileCtrl.headerImg"></div>
+	</gj-page-header-spotlight>
+
+	<gj-page-header-nav>
+		<nav class="platform-list inline">
+			<ul>
+				<li>
+					<a ui-sref="profile.overview" ui-sref-active="active" translate>
+						profile.overview_tab
+					</a>
+				</li>
+				<li ng-if="profileCtrl.videosCount > 0">
+					<a ui-sref="profile.videos" ui-sref-active="active" translate>
+						Videos
+					</a>
+				</li>
+				<li>
+					<a ui-sref="profile.library" ui-sref-active="active" translate>
+						profile.library_tab
+					</a>
+				</li>
+				<li ng-if="App.user && (App.user.permission_level > 0 || profileCtrl.userFriendship.state == User_Friendship.STATE_FRIENDS || profileCtrl.user.id != App.user.id)">
+					<a gj-popover-trigger="profile-more-options">
+						<span class="jolticon jolticon-ellipsis-h"></span>
+						<span translate>options.more</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+
+		<gj-popover popover-id="profile-more-options">
+			<div class="list-group list-group-dark">
+				<a class="list-group-item has-icon"
+					ng-if="App.user && profileCtrl.user.id != App.user.id"
+					ng-click="profileCtrl.report()"
+					>
+					<span class="jolticon jolticon-flag warning"></span>
+					<span translate>profile.report_user_button</span>
+				</a>
+				<a class="list-group-item has-icon"
+					ng-if="profileCtrl.userFriendship.state == User_Friendship.STATE_FRIENDS"
+					ng-click="profileCtrl.removeFriend()"
+					>
+					<span class="jolticon jolticon-friend-remove-2 warning"></span>
+					<span translate>profile.remove_friend_button</span>
+				</a>
+				<a class="list-group-item has-icon"
+					ng-if="App.user.permission_level > 0"
+					ng-href="{{ ::Environment.baseUrl }}/moderate/users/view/{{ ::profileCtrl.user.id }}"
+					target="_blank"
+					>
+					<span class="jolticon jolticon-cog"></span>
+					<span translate>profile.moderate_user_button</span>
+				</a>
+			</div>
+		</gj-popover>
+	</gj-page-header-nav>
+
+	<gj-page-header-controls>
+		<div ng-if="App.user && profileCtrl.user.id != App.user.id && !profileCtrl.userFriendship && !profileCtrl.user.is_verified">
+			<a class="btn btn-outline btn-block" ng-click="profileCtrl.sendFriendRequest()">
+				<span class="jolticon jolticon-friend-add-2"></span>
+				{{ ::'profile.friend_request_button' | translate }}
+			</a>
+		</div>
+	</gj-page-header-controls>
+
+</gj-page-header>
+
+<ui-view></ui-view>

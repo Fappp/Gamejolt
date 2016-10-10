@@ -1,0 +1,131 @@
+<div ng-if="Screen.isMobile && libraryCtrl.shouldShowSidebar" class="well fill-darker sans-margin-bottom">
+	<a class="btn btn-outline btn-block" ui-sref="^.overview">
+		<span class="jolticon jolticon-chevron-left"></span>
+		<span translate>Back to Game Library</span>
+	</a>
+</div>
+
+<header class="section collection-header">
+	<div class="container">
+
+		<div ng-if="collectionCtrl.type == 'tag'">
+			<div gj-partial="/app/views/library/collection/_header-tag.html"></div>
+		</div>
+		<div ng-if="collectionCtrl.type != 'tag'">
+			<div gj-partial="/app/views/library/collection/_header-default.html"></div>
+		</div>
+	</div>
+
+	<div ng-if="Screen.isXs">
+		<div gj-partial="/app/views/library/collection/_header/_header-xs.html"></div>
+	</div>
+	<div ng-if="Screen.isSm || Screen.isMd">
+		<div gj-partial="/app/views/library/collection/_header/_header-sm.html"></div>
+	</div>
+	<div ng-if="Screen.isLg">
+		<div gj-partial="/app/views/library/collection/_header/_header-desktop.html"></div>
+	</div>
+
+</header>
+
+<gj-popover popover-id="collection-options">
+	<div class="list-group">
+		<a class="list-group-item has-icon"
+			ng-click="collectionCtrl.removePlaylist()"
+			>
+			<span class="jolticon jolticon-remove"></span>
+			{{ ::'library.collection.remove_playlist_button' | translate }}
+		</a>
+	</div>
+</gj-popover>
+
+<!--
+	Don't ng-if or the ui-view won't load.
+	Just hide it.
+-->
+<section class="section" ng-show="collectionCtrl.totalGamesCount">
+	<div class="container">
+
+		<div ng-if="collectionCtrl.totalGamesCount">
+
+			<div class="row">
+				<div class="col-md-4" ng-class="Screen.isDesktop ? 'pull-right' : ''">
+					<gj-game-filtering-input
+						gj-filtering-container="collectionCtrl.filteringContainer"
+						>
+					</gj-game-filtering-input>
+				</div>
+				<div class="col-md-8">
+					<gj-game-filtering-tags
+						gj-filtering-container="collectionCtrl.filteringContainer"
+						>
+					</gj-game-filtering-tags>
+
+					<gj-pagination
+						id="collection-pagination"
+						items-per-page="collectionCtrl.perPage"
+						total-items="collectionCtrl.gamesCount"
+						current-page="collectionCtrl.currentPage">
+					</gj-pagination>
+
+				</div>
+			</div>
+
+			<div class="clearfix">
+				<div class="pull-left">
+					<p class="text-muted small"
+						ng-show="!collectionCtrl.isLoading && collectionCtrl.gamesCount"
+						translate
+						translate-n="collectionCtrl.gamesCount"
+						translate-plural="games.list.games_count"
+						translate-params-page="collectionCtrl.currentPage"
+						translate-comment="{{ page }} expands to the current page of games"
+						>
+						games.list.games_count
+					</p>
+				</div>
+
+				<div class="pull-right" ng-if="collectionCtrl.type == 'tag'">
+					<gj-sorting sorting-options="collectionCtrl.tagSorting"></gj-sorting>
+				</div>
+
+				<div class="pull-right" ng-if="collectionCtrl.type == 'developer'">
+					<gj-sorting sorting-options="collectionCtrl.developerSorting"></gj-sorting>
+				</div>
+			</div>
+
+		</div>
+
+		<ui-view></ui-view>
+
+		<div ng-if="collectionCtrl.totalGamesCount">
+
+			<gj-pagination
+				items-per-page="collectionCtrl.perPage"
+				total-items="collectionCtrl.gamesCount"
+				current-page="collectionCtrl.currentPage"
+				on-page-change="Scroll.to( 'collection-pagination', { animate: false } )">
+			</gj-pagination>
+
+		</div>
+
+	</div>
+</section>
+
+<!-- No Games Match Filters -->
+<section class="section fill-pink anim-fade-in no-animate-leave" ng-if="collectionCtrl.totalGamesCount && !collectionCtrl.gamesCount">
+	<div class="container" translate>No games match your filters. <b>Zoinks!</b></div>
+</section>
+
+<!-- No Games -->
+<section class="section fill-pink" ng-if="!collectionCtrl.totalGamesCount">
+	<div class="container" ng-switch="collectionCtrl.type">
+		<div ng-switch-when="playlist" translate>library.collection.no_games_playlist_html</div>
+		<div ng-switch-when="developer" translate>library.collection.no_games_developer_html</div>
+		<div ng-switch-when="followed" translate>library.collection.no_games_followed_html</div>
+		<div ng-switch-when="bundle" translate>library.collection.no_games_bundle_html</div>
+		<div ng-switch-when="tag" translate>library.collection.no_games_tag_html</div>
+		<div ng-switch-when="owned" translate>You don't own any games yet. Go buy some!</div>
+		<div ng-switch-when="recommended" translate>We don't have enough data from this user to show accurate recommendations yet!</div>
+	</div>
+</section>
